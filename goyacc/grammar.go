@@ -15,8 +15,8 @@ import (
 //line grammar.go.y:10
 type ExprSymType struct {
 	yys    int
-	String string
-	Number float64
+	String string  // Number or name
+	Number float64 // Value that an expr evaluates to
 }
 
 const NUMBER = 57346
@@ -43,7 +43,7 @@ const ExprEofCode = 1
 const ExprErrCode = 2
 const ExprInitialStackSize = 16
 
-//line grammar.go.y:43
+//line grammar.go.y:66
 
 //line yacctab:1
 var ExprExca = [...]int{
@@ -452,55 +452,55 @@ Exprdefault:
 
 	case 2:
 		ExprDollar = ExprS[Exprpt-1 : Exprpt+1]
-//line grammar.go.y:26
+//line grammar.go.y:27
 		{
 			fmt.Println(ExprDollar[1].Number)
 		}
 	case 4:
 		ExprDollar = ExprS[Exprpt-1 : Exprpt+1]
-//line grammar.go.y:31
+//line grammar.go.y:41
 		{
 			ExprVAL.Number, _ = strconv.ParseFloat(ExprDollar[1].String, 64)
 		}
 	case 5:
 		ExprDollar = ExprS[Exprpt-1 : Exprpt+1]
-//line grammar.go.y:32
+//line grammar.go.y:47
 		{
 			ExprVAL.Number = 0
 		}
 	case 6:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:33
+//line grammar.go.y:50
 		{
 			ExprVAL.Number = ExprDollar[1].Number + ExprDollar[3].Number
 		}
 	case 7:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:34
+//line grammar.go.y:51
 		{
 			ExprVAL.Number = ExprDollar[1].Number - ExprDollar[3].Number
 		}
 	case 8:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:35
+//line grammar.go.y:52
 		{
 			ExprVAL.Number = ExprDollar[1].Number * ExprDollar[3].Number
 		}
 	case 9:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:36
+//line grammar.go.y:53
 		{
 			ExprVAL.Number = ExprDollar[1].Number / ExprDollar[3].Number
 		}
 	case 10:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:37
+//line grammar.go.y:56
 		{
 			ExprVAL.Number = ExprDollar[2].Number
 		}
 	case 11:
 		ExprDollar = ExprS[Exprpt-2 : Exprpt+1]
-//line grammar.go.y:38
+//line grammar.go.y:59
 		{
 			ExprVAL.Number = -ExprDollar[2].Number
 		}
