@@ -11,7 +11,7 @@ import (
 // MyExprLexer reads from an io.Reader and tokenizes the input from it
 type MyExprLexer struct {
 	buf   *bufio.Reader
-	input string
+	input []rune
 	index int
 }
 
@@ -29,7 +29,7 @@ func (l *MyExprLexer) GetMore() error {
 	if err == io.EOF {
 		return err
 	}
-	l.input = line[:len(line)-1] // We get rid of the '\n' at the end
+	l.input = []rune(line[:len(line)-1]) // We get rid of the '\n' at the end
 	l.index = 0
 	return nil
 }
@@ -81,12 +81,12 @@ forloop:
 		switch c := l.input[l.index]; c {
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			l.index++
-			buf.WriteByte(c)
+			buf.WriteRune(c)
 		case '.':
 			if !didDot {
 				l.index++
 				didDot = true
-				buf.WriteByte(c)
+				buf.WriteRune(c)
 				continue
 			}
 			fallthrough
@@ -102,7 +102,7 @@ forloop:
 // into yylval.String.
 func (l *MyExprLexer) Identifier(yylval *ExprSymType) int {
 	buf := strings.Builder{}
-	buf.WriteByte(l.input[l.index])
+	buf.WriteRune(l.input[l.index])
 	l.index++
 forloop:
 	for {
@@ -111,7 +111,7 @@ forloop:
 		case 'a' <= c && c <= 'z':
 		case 'A' <= c && c <= 'Z':
 		case '0' <= c && c <= '9':
-			buf.WriteByte(c)
+			buf.WriteRune(c)
 		default:
 			break forloop
 		}
