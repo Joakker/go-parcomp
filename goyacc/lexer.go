@@ -8,18 +8,21 @@ import (
 	"strings"
 )
 
+// MyExprLexer reads from an io.Reader and tokenizes the input from it
 type MyExprLexer struct {
 	buf   *bufio.Reader
 	input string
 	index int
 }
 
+// NewExprLexer creates and initializes a MyExprLexer from buf
 func NewExprLexer(buf io.Reader) *MyExprLexer {
 	l := &MyExprLexer{buf: bufio.NewReader(buf)}
 	l.GetMore()
 	return l
 }
 
+// GetMore prints a prompt and reads from the input to get a line of text
 func (l *MyExprLexer) GetMore() error {
 	fmt.Print("> ")
 	line, err := l.buf.ReadString('\n')
@@ -31,6 +34,8 @@ func (l *MyExprLexer) GetMore() error {
 	return nil
 }
 
+// Lex is called by ExprParserImpl to get the next token, initializing yylval
+// accordingly
 func (l *MyExprLexer) Lex(yylval *ExprSymType) int {
 	if l.index >= len(l.input) {
 		return -1
@@ -47,6 +52,8 @@ func (l *MyExprLexer) Lex(yylval *ExprSymType) int {
 	}
 }
 
+// SkipWhitespace skips characters from the buffered line while they are
+// whitespace.
 func (l *MyExprLexer) SkipWhitespace() {
 	for {
 		if l.index >= len(l.input) {
@@ -61,6 +68,8 @@ func (l *MyExprLexer) SkipWhitespace() {
 	}
 }
 
+// Number reads a number in decimal representation from the buffered line,
+// storing it's value into yylval.String.
 func (l *MyExprLexer) Number(yylval *ExprSymType) int {
 	buf := strings.Builder{}
 	didDot := false
@@ -89,6 +98,8 @@ forloop:
 	return NUMBER
 }
 
+// Identifier reads a name of the form [a-zA-Z][a-zA-Z0-9]*, storing it's value
+// into yylval.String.
 func (l *MyExprLexer) Identifier(yylval *ExprSymType) int {
 	buf := strings.Builder{}
 	buf.WriteByte(l.input[l.index])
@@ -109,6 +120,7 @@ forloop:
 	return IDENTIFIER
 }
 
+// Error logs the error s to os.Stderr.
 func (l *MyExprLexer) Error(s string) {
 	fmt.Fprintln(os.Stderr, "Expr parsing error:", s)
 }

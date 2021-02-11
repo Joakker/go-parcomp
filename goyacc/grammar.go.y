@@ -8,36 +8,59 @@ import (
 %}
 
 %union {
-    String string
-    Number float64
+    String string       // Number or name
+    Number float64      // Value that an expr evaluates to
 }
 
-%left '+' '-'
-%left '*' '/'
+%left '+' '-'           /* Lowest operator precedence */
+%left '*' '/'           /* Mext highest operator precedence*/
 
 %token '(' ')'
 
-%token <String> NUMBER IDENTIFIER
-%type <Number> expr
+%token  <String> NUMBER IDENTIFIER  /* These tokens use the field String */
+%type   <Number> expr               /* While this one evaluates to a number*/
 
 %%
 
 start:
+        /* A blank line is valid */
      | expr             { fmt.Println($1) }
+        /*
+        * Print the result of an expression when it
+        * is the only element of the statement
+        */
+
      | assignment
+        /*
+        * Do nothing on assignment, as it would be
+        * taken care of in the rule itself
+        */
      ;
 
 expr:
       NUMBER                { $$, _ = strconv.ParseFloat($1, 64) }
+        /*
+        * When an expression consists of a number (string), it's value
+        * corresponds to the float64 that string represents.
+        */
+
     | IDENTIFIER            { $$ = 0        }
+        /* TODO: Fetch the value associated with the variable */
+
     | expr '+' expr         { $$ = $1 + $3  }
     | expr '-' expr         { $$ = $1 - $3  }
     | expr '*' expr         { $$ = $1 * $3  }
     | expr '/' expr         { $$ = $1 / $3  }
+        /* Perform the corresponding binary operation */
+
     | '(' expr ')'          { $$ = $2       }
+        /* Group expressions between parens to give them higher precedence */
+
     | '-' expr   %prec '*'  { $$ = -$2      }
+        /* The unary minus has the same precedence as multiplication */
     ;
 
 assignment:
           IDENTIFIER '=' expr
+            /* TODO: Store the values in a dictionary to fetch them later */
 %%
