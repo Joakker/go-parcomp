@@ -9,10 +9,11 @@ import __yyfmt__ "fmt"
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
-//line grammar.go.y:10
+//line grammar.go.y:11
 type ExprSymType struct {
 	yys    int
 	String string  // Number or name
@@ -43,7 +44,7 @@ const ExprEofCode = 1
 const ExprErrCode = 2
 const ExprInitialStackSize = 16
 
-//line grammar.go.y:66
+//line grammar.go.y:72
 
 //line yacctab:1
 var ExprExca = [...]int{
@@ -452,57 +453,65 @@ Exprdefault:
 
 	case 2:
 		ExprDollar = ExprS[Exprpt-1 : Exprpt+1]
-//line grammar.go.y:27
+//line grammar.go.y:28
 		{
 			fmt.Println(ExprDollar[1].Number)
 		}
 	case 4:
 		ExprDollar = ExprS[Exprpt-1 : Exprpt+1]
-//line grammar.go.y:41
+//line grammar.go.y:42
 		{
 			ExprVAL.Number, _ = strconv.ParseFloat(ExprDollar[1].String, 64)
 		}
 	case 5:
 		ExprDollar = ExprS[Exprpt-1 : Exprpt+1]
-//line grammar.go.y:47
+//line grammar.go.y:48
 		{
-			ExprVAL.Number = 0
+			ExprVAL.Number = Variables.Get(ExprDollar[1].String)
 		}
 	case 6:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:50
+//line grammar.go.y:54
 		{
 			ExprVAL.Number = ExprDollar[1].Number + ExprDollar[3].Number
 		}
 	case 7:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:51
+//line grammar.go.y:55
 		{
 			ExprVAL.Number = ExprDollar[1].Number - ExprDollar[3].Number
 		}
 	case 8:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:52
+//line grammar.go.y:56
 		{
 			ExprVAL.Number = ExprDollar[1].Number * ExprDollar[3].Number
 		}
 	case 9:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:53
+//line grammar.go.y:57
 		{
 			ExprVAL.Number = ExprDollar[1].Number / ExprDollar[3].Number
 		}
 	case 10:
 		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
-//line grammar.go.y:56
+//line grammar.go.y:60
 		{
 			ExprVAL.Number = ExprDollar[2].Number
 		}
 	case 11:
 		ExprDollar = ExprS[Exprpt-2 : Exprpt+1]
-//line grammar.go.y:59
+//line grammar.go.y:63
 		{
 			ExprVAL.Number = -ExprDollar[2].Number
+		}
+	case 12:
+		ExprDollar = ExprS[Exprpt-3 : Exprpt+1]
+//line grammar.go.y:68
+		{
+			if !math.IsNaN(ExprDollar[3].Number) {
+				Variables[ExprDollar[1].String] = ExprDollar[3].Number
+			}
 		}
 	}
 	goto Exprstack /* stack new state and value */

@@ -4,6 +4,7 @@ package main
 import (
     "fmt"
     "strconv"
+    "math"
 )
 %}
 
@@ -44,8 +45,11 @@ expr:
         * corresponds to the float64 that string represents.
         */
 
-    | IDENTIFIER            { $$ = 0        }
-        /* TODO: Fetch the value associated with the variable */
+    | IDENTIFIER            { $$ = Variables.Get($1)        }
+        /*
+         * IDENTIFIER corresponds to a string, so we can use it to index
+         * the Variables map
+         */
 
     | expr '+' expr         { $$ = $1 + $3  }
     | expr '-' expr         { $$ = $1 - $3  }
@@ -61,6 +65,8 @@ expr:
     ;
 
 assignment:
-          IDENTIFIER '=' expr
-            /* TODO: Store the values in a dictionary to fetch them later */
+          IDENTIFIER '=' expr   { if !math.IsNaN($3) { Variables[$1] = $3 } }
+            /* Store the value of expr in the Variables map, but
+             * only if it is defined (distinct from math.NaN())
+             */
 %%

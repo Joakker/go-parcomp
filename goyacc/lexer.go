@@ -106,6 +106,9 @@ func (l *MyExprLexer) Identifier(yylval *ExprSymType) int {
 	l.index++
 forloop:
 	for {
+		if l.index >= len(l.input) {
+			break forloop
+		}
 		c := l.input[l.index]
 		switch {
 		case 'a' <= c && c <= 'z':

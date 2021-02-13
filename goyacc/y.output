@@ -7,7 +7,7 @@ state 0
 	'('  shift 6
 	NUMBER  shift 4
 	IDENTIFIER  shift 5
-	.  reduce 1 (src line 25)
+	.  reduce 1 (src line 26)
 
 	expr  goto 2
 	start  goto 1
@@ -31,19 +31,19 @@ state 2
 	'-'  shift 9
 	'*'  shift 10
 	'/'  shift 11
-	.  reduce 2 (src line 27)
+	.  reduce 2 (src line 28)
 
 
 state 3
 	start:  assignment.    (3)
 
-	.  reduce 3 (src line 33)
+	.  reduce 3 (src line 34)
 
 
 state 4
 	expr:  NUMBER.    (4)
 
-	.  reduce 4 (src line 40)
+	.  reduce 4 (src line 41)
 
 
 state 5
@@ -51,7 +51,7 @@ state 5
 	assignment:  IDENTIFIER.'=' expr 
 
 	'='  shift 12
-	.  reduce 5 (src line 47)
+	.  reduce 5 (src line 48)
 
 
 state 6
@@ -149,7 +149,7 @@ state 13
 state 14
 	expr:  IDENTIFIER.    (5)
 
-	.  reduce 5 (src line 47)
+	.  reduce 5 (src line 48)
 
 
 state 15
@@ -159,7 +159,7 @@ state 15
 	expr:  expr.'/' expr 
 	expr:  '-' expr.    (11)
 
-	.  reduce 11 (src line 59)
+	.  reduce 11 (src line 63)
 
 
 state 16
@@ -171,7 +171,7 @@ state 16
 
 	'*'  shift 10
 	'/'  shift 11
-	.  reduce 6 (src line 50)
+	.  reduce 6 (src line 54)
 
 
 state 17
@@ -183,7 +183,7 @@ state 17
 
 	'*'  shift 10
 	'/'  shift 11
-	.  reduce 7 (src line 51)
+	.  reduce 7 (src line 55)
 
 
 state 18
@@ -193,7 +193,7 @@ state 18
 	expr:  expr '*' expr.    (8)
 	expr:  expr.'/' expr 
 
-	.  reduce 8 (src line 52)
+	.  reduce 8 (src line 56)
 
 
 state 19
@@ -203,7 +203,7 @@ state 19
 	expr:  expr.'/' expr 
 	expr:  expr '/' expr.    (9)
 
-	.  reduce 9 (src line 53)
+	.  reduce 9 (src line 57)
 
 
 state 20
@@ -217,13 +217,13 @@ state 20
 	'-'  shift 9
 	'*'  shift 10
 	'/'  shift 11
-	.  reduce 12 (src line 63)
+	.  reduce 12 (src line 67)
 
 
 state 21
 	expr:  '(' expr ')'.    (10)
 
-	.  reduce 10 (src line 56)
+	.  reduce 10 (src line 60)
 
 
 12 terminals, 4 nonterminals
