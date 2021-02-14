@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"os"
 	"strconv"
 
 	"github.com/Joakker/go-parcomp/antlr/parser"
@@ -28,7 +29,6 @@ func (i *Interpreter) EnterIdentifier(ctx *parser.IdentifierContext) {
 		panic("No such variable")
 	}
 	i.Push(val)
-	fmt.Println(i.Stack)
 }
 
 func (i *Interpreter) ExitMulDiv(ctx *parser.MulDivContext) {
@@ -55,6 +55,17 @@ func (i *Interpreter) ExitAddSub(ctx *parser.AddSubContext) {
 		i.Push(a + b)
 	case parser.ExprLexerSUB:
 		i.Push(a - b)
+	}
+}
+
+func (i *Interpreter) ExitAssignStmt(ctx *parser.AssignStmtContext) {
+	name := ctx.Namelist().(*parser.NamelistContext).AllID()
+	if len(name) != len(i.Stack) {
+		fmt.Fprintf(os.Stderr, "Lengths mismatch")
+		return
+	}
+	for j := len(name) - 1; j >= 0; j-- {
+		i.Variable[name[j].GetText()] = i.Pop()
 	}
 }
 
