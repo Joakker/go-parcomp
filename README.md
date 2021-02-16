@@ -9,5 +9,6 @@ Currently the list includes:
 - [Goyacc](https://pkg.go.dev/golang.org/x/tools/cmd/goyacc) using a
   hand-written lexer
 - [Antlr 4](https://www.antlr.org) with the `-Dlanguage=Go` option
+- A handmade LR(1) parser
 
 Feel free to send a PR or Issue to add a particular parser generator :smiley:
